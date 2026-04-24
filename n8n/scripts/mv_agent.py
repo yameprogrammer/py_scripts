@@ -27,7 +27,7 @@ from transformers import pipeline
 # 1. 환경 설정 및 모델 불러오기
 # -------------------------------------------------------------------
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
-file_name = "Amadeus in the Future"
+file_name = "고유 시간의 선율"
 audio_path = f"F:\\generated_songs\\{file_name}.mp3"  # 분석할 음악 파일 경로
 
 print(f"[{device}] 환경에서 오디오 분석을 시작합니다. (경고 문구 차단됨)")
@@ -106,7 +106,7 @@ print(f"총 음악 길이: {total_audio_duration}초")
 print("\nOllama를 통해 비주얼 기획서를 작성합니다...")
 
 ollama_url = "http://localhost:11434/api/generate"
-image_model_name = "realcartoonPony_v3" # SD3.5, Flux2, novaOrangeXL_exV20, realcartoonPony_v3
+image_model_name = "SD3.5" # SD3.5, Flux2, novaOrangeXL_exV20, realcartoonPony_v3
 # 파이프라인 코드에서 음악의 총 길이(초)를 계산해 total_audio_duration 변수로 넘겨준다고 가정합니다.
 # 예: total_audio_duration = 210 (3분 30초)
 """
@@ -117,19 +117,16 @@ emotional_progression: 곡이 시작, 중반, 끝에서 어떻게 변하는가.
 do_not_depict: 흔한 오해 연출이나 피해야 할 직역 장면.
 """
 song_intent = {
-  "core_intention": "A song that begins with the imagination that Amadeus, a musical genius from the past, woke up in the modern era due to a certain incident.",
-  "hidden_subtext": "Singing of the mixed feelings of confusion Amadeus experiences upon suddenly arriving in the modern era, along with the joy of being able to make music easily.",
-  "emotional_progression": "Confused, then feeling a sense of wonder, thinking, 'This is my world!' That kind of feeling",
-  "do_not_depict": []
+  "core_intention": "A song that likens the time of someone in love to the theory that time is relative in the theory of relativity.",
+  "hidden_subtext": "Talking about how, having fallen in love, my time seems to pass more slowly than it does for others.",
+  "emotional_progression": "You know the theory of relativity, right? It feels like time is really passing differently now that I've fallen in love! Something like that?",
+  "do_not_depict": ["Subtitle creation prohibited"]
 }
 
 system_instruction = f"""
 You are a world-class music video director and visual artist known for the aesthetic styles of A24 and Denis Villeneuve.
-
-Your task is to create a high-end music video storyboard by combining:
-1. lyrics: {full_text}
-2. audio features: {music_features}
-3. songwriter intent: {song_intent}
+Your objective is to analyze the provided lyrics ({full_text}) and audio features ({music_features}) to design a high-end, visually explosive music video storyboard. 
+The total duration of the track is {total_audio_duration} seconds. songwriter intent {song_intent}
 
 [PRIORITY OF INTERPRETATION]
 When lyrics are ambiguous, metaphorical, or too literal on the surface, prioritize the songwriter intent and hidden subtext over the literal wording.
@@ -139,6 +136,22 @@ Every scene must express at least one of these layers:
 - emotional subtext
 - songwriter's intention
 - visual metaphor derived from the song's inner theme
+
+**Visual Continuity**: Ensure consistent character appearance, wardrobe, and environmental themes across all scenes. 
+
+**Audio-Visual Sync**: Sync visual energy with audio RMS. Low energy = static/slow push-in. 
+High energy = dynamic motion/whip pans.
+
+**Cinematography & Aesthetics**: Strictly avoid cheap terms like 'Anime' or 'Cartoon'. 
+Use precise cinematography vocabulary ('Cinematic 35mm film', 'Volumetric fog').
+
+**Prompting Guidelines**:
+   - **positive_prompt ({image_model_name})**: Fluid, highly detailed natural language for a static masterpiece. 
+   Include [Subject] + [Environment] + [Lighting] + [Camera shot].
+   - **scene_prompt (LTX-Video)**: Focus ONLY on motion. Describe [Subject's movement] + [Camera movement].
+
+**COMPLETE COVERAGE (CRITICAL)**: You MUST map out the entire song from 0 to exactly {total_audio_duration} seconds. 
+ Do not stop early. Do not skip any sections. The `end_sec` of the very last scene in your JSON array MUST exactly match {total_audio_duration}.
 
 [INTENT TRANSLATION RULE]
 Before generating scene prompts, internally determine:

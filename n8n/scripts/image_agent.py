@@ -11,7 +11,7 @@ base_out_path = os.path.join(base_out_path, "out")
 workflow_path = os.path.dirname(os.path.abspath(__file__))
 workflow_path = os.path.join(workflow_path, "workflow")
 
-song_name = "Amadeus in the Future"
+song_name = "고유 시간의 선율"
 conti_path = os.path.join(base_out_path, f"{song_name}_conti_plan.json")
 
 with open(conti_path, "r", encoding="utf-8") as f:
@@ -67,7 +67,7 @@ WORKFLOW_CONFIGS = {
 }
 
 # 기본값은 sd3.5이며, 환경변수 IMAGE_WORKFLOW=flux2 로 전환 가능합니다.
-selected_workflow = os.getenv("IMAGE_WORKFLOW", "realcartoonpony").strip().lower()
+selected_workflow = os.getenv("IMAGE_WORKFLOW", "sd3.5").strip().lower()
 if selected_workflow not in WORKFLOW_CONFIGS:
     available = ", ".join(WORKFLOW_CONFIGS.keys())
     raise ValueError(f"지원하지 않는 워크플로우 선택값입니다: {selected_workflow}. 사용 가능: {available}")
