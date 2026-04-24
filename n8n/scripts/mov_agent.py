@@ -11,26 +11,49 @@ OUTPUT_DIR = os.path.join(COMFY_DIR, "output")
 INPUT_DIR = os.path.join(COMFY_DIR, "input")
 SERVER_URL = "http://127.0.0.1:8188/prompt"
 HISTORY_URL = "http://127.0.0.1:8188/history"
+
+base_out_path = os.path.dirname(os.path.abspath(__file__))
+base_out_path = os.path.join(base_out_path, "out")
+
+workflow_path = os.path.dirname(os.path.abspath(__file__))
+workflow_path = os.path.join(workflow_path, "workflow")
+
+file_name = "고유 시간의 선율"
 # ----------------------------------------------------------------
 
 print("\n" + "=" * 50)
 print("🎬 2단계: LTX-Video 2.3 영상 생성 자동화를 시작합니다...")
 
 # 1. LTX-Video 구조도 및 기획서 읽기
-video_flow_path = r"C:\Users\parkp\workspace\py_scripts\n8n\scripts\video_ltx2_3_i2v.json"
+video_flow_path = os.path.join(workflow_path, "video_ltx2_3_i2v.json")
 with open(video_flow_path, "r", encoding="utf-8-sig") as f:
     video_workflow = json.load(f)
 
 # (이전 단계에서 생성한 mv_conti_plan.json 파일을 읽어왔다고 가정합니다)
-conti_path = r"C:\Users\parkp\workspace\py_scripts\Amadeus in the Future_conti_plan.json"
+conti_path = os.path.join(base_out_path, f"{file_name}_conti_plan.json")
 with open(conti_path, "r", encoding="utf-8") as f:
     plan_data = json.load(f)
 
 fps = video_workflow["267:260"]["inputs"]["value"]
+
+theme_setup = plan_data["theme_setup"]
+main_character = theme_setup["main_character_design"]
+color_palette = theme_setup["color_palette_and_mood"]
+
+# cinematography_style 없으면 빈 문자열로 대체
+style = theme_setup["cinematography_style"] if theme_setup.get("cinematography_style") else ""
+
 for scene in plan_data["timeline"]:
     start_sec = scene["start_sec"]
     end_sec = scene["end_sec"]
-    prompt_text = scene["positive_prompt"]
+
+    prompt_text = f"{style},{color_palette},"
+    prompt_text += scene["visual_concept"]
+
+    # 메인캐릭터 정보와 컬러 팔레트 정보를 프롬프트에 반영합니다.
+    prompt_text = f",{main_character},"
+    prompt_text += scene["positive_prompt"]
+
     negative_prompt = scene["negative_prompt"]
     scene_prompt = scene["scene_prompt"]
 

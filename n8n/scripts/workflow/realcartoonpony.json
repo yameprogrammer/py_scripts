@@ -1,0 +1,180 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "PONY\\realcartoonPony_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "None",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "resolution": "1024 x 1024",
+      "empty_latent_width": 512,
+      "empty_latent_height": 512,
+      "positive": "",
+      "negative": "",
+      "batch_size": 1
+    },
+    "class_type": "easy comfyLoader",
+    "_meta": {
+      "title": "EasyLoader (Comfy)"
+    }
+  },
+  "2": {
+    "inputs": {
+      "steps": 30,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1,
+      "image_output": "Hide",
+      "link_id": 0,
+      "save_prefix": "ComfyUI",
+      "seed": 0,
+      "pipe": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "easy fullkSampler",
+    "_meta": {
+      "title": "EasyKSampler (Full)"
+    }
+  },
+  "3": {
+    "inputs": {
+      "guide_size": 512,
+      "guide_size_for": true,
+      "max_size": 1024,
+      "seed": 0,
+      "steps": 20,
+      "cfg": 8,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 0.5,
+      "feather": 5,
+      "noise_mask": true,
+      "force_inpaint": true,
+      "bbox_threshold": 0.5,
+      "bbox_dilation": 10,
+      "bbox_crop_factor": 3,
+      "sam_detection_hint": "center-1",
+      "sam_dilation": 0,
+      "sam_threshold": 0.93,
+      "sam_bbox_expansion": 0,
+      "sam_mask_hint_threshold": 0.7,
+      "sam_mask_hint_use_negative": "False",
+      "drop_size": 10,
+      "wildcard": "",
+      "cycle": 1,
+      "inpaint_model": false,
+      "noise_mask_feather": 20,
+      "tiled_encode": false,
+      "tiled_decode": false,
+      "image": [
+        "2",
+        1
+      ],
+      "model": [
+        "2",
+        2
+      ],
+      "clip": [
+        "2",
+        7
+      ],
+      "vae": [
+        "2",
+        6
+      ],
+      "positive": [
+        "2",
+        3
+      ],
+      "negative": [
+        "2",
+        4
+      ],
+      "bbox_detector": [
+        "4",
+        0
+      ],
+      "sam_model_opt": [
+        "5",
+        0
+      ],
+      "segm_detector_opt": [
+        "6",
+        1
+      ]
+    },
+    "class_type": "FaceDetailer",
+    "_meta": {
+      "title": "얼굴 디테일러"
+    }
+  },
+  "4": {
+    "inputs": {
+      "model_name": "bbox/face_yolov8n.pt"
+    },
+    "class_type": "UltralyticsDetectorProvider",
+    "_meta": {
+      "title": "UltralyticsDetectorProvider"
+    }
+  },
+  "5": {
+    "inputs": {
+      "model_name": "sam_vit_b_01ec64.pth",
+      "device_mode": "AUTO"
+    },
+    "class_type": "SAMLoader",
+    "_meta": {
+      "title": "SAMLoader (Impact)"
+    }
+  },
+  "6": {
+    "inputs": {
+      "model_name": "segm/person_yolov8m-seg.pt"
+    },
+    "class_type": "UltralyticsDetectorProvider",
+    "_meta": {
+      "title": "UltralyticsDetectorProvider"
+    }
+  },
+  "7": {
+    "inputs": {
+      "images": [
+        "3",
+        1
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "이미지 미리보기"
+    }
+  },
+  "8": {
+    "inputs": {
+      "images": [
+        "3",
+        2
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "이미지 미리보기"
+    }
+  },
+  "9": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "이미지 저장"
+    }
+  }
+}
