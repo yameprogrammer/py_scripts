@@ -1,0 +1,76 @@
+{
+  "project": {
+    "name": "default",
+    "created_at": "2026-04-24T00:00:00Z",
+    "updated_at": "2026-04-24T00:00:00Z"
+  },
+  "runtime": {
+    "current_episode": 1,
+    "last_success_checkpoint": "bootstrapped",
+    "last_completed_stage": null,
+    "last_error": null
+  },
+  "workflow": {
+    "episode_pipeline": [
+      "plan",
+      "draft",
+      "review",
+      "revise",
+      "finalize"
+    ],
+    "quality_gate": {
+      "target_score": 80,
+      "max_revision_rounds": 5
+    },
+    "last_success": {
+      "episode": 0,
+      "stage": "bootstrapped",
+      "timestamp": "2026-04-24T00:00:00Z"
+    }
+  },
+  "llm": {
+    "active_provider": "ollama",
+    "providers": {
+      "ollama": {
+        "enabled": true,
+        "base_url": "http://127.0.0.1:11434",
+        "model": "qwen2.5:7b-instruct",
+        "temperature": 0.7
+      },
+      "gemini": {
+        "enabled": false,
+        "model": "gemini-2.5-flash",
+        "api_key_env": "GEMINI_API_KEY",
+        "temperature": 0.7
+      },
+      "openai": {
+        "enabled": false,
+        "base_url": "https://api.openai.com/v1",
+        "model": "gpt-4.1-mini",
+        "api_key_env": "OPENAI_API_KEY",
+        "temperature": 0.7
+      }
+    }
+  },
+  "episodes": {
+    "planned": 100,
+    "completed": 0,
+    "items": {
+      "episode_001": {
+        "status": "planned",
+        "title": "1화 초안 준비",
+        "manuscript_path": "episodes/episode_001/manuscript.md",
+        "review_path": "episodes/episode_001/review.json",
+        "updated_at": "2026-04-24T00:00:00Z"
+      }
+    }
+  },
+  "checkpoints": [
+    {
+      "episode": 0,
+      "stage": "bootstrapped",
+      "timestamp": "2026-04-24T00:00:00Z",
+      "note": "초기 디렉토리와 기본 설정 파일 생성 완료"
+    }
+  ]
+}

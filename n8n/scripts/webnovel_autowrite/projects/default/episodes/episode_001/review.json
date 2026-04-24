@@ -1,0 +1,35 @@
+{
+  "episode": 1,
+  "status": "pending",
+  "scores": {
+    "plot_coherence": null,
+    "character_consistency": null,
+    "immersion": null,
+    "style": null,
+    "length_adherence": null,
+    "overall": null
+  },
+  "strengths": [],
+  "issues": [],
+  "revision_requests": [],
+  "reviewed_at": null,
+  "manuscript_stats": {
+    "char_count": 0,
+    "char_count_no_space": 0,
+    "word_count": 0,
+    "line_count": 0,
+    "paragraph_count": 0,
+    "target_chars": 0,
+    "min_chars": 0,
+    "meets_length": false
+  },
+  "quality_gate": {
+    "target_score": 80,
+    "passed": false,
+    "reasons": []
+  },
+  "attempt_history": [],
+  "final_attempt": 0,
+  "final_passed": false
+}
+
