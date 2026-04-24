@@ -144,7 +144,7 @@
   },
   "75:68": {
     "inputs": {
-      "value": 1024
+      "value": 1280
     },
     "class_type": "PrimitiveInt",
     "_meta": {
@@ -153,7 +153,7 @@
   },
   "75:69": {
     "inputs": {
-      "value": 1024
+      "value": 720
     },
     "class_type": "PrimitiveInt",
     "_meta": {

@@ -27,7 +27,7 @@ from transformers import pipeline
 # 1. 환경 설정 및 모델 불러오기
 # -------------------------------------------------------------------
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
-file_name = "고유 시간의 선율"
+file_name = "Amadeus in the Future"
 audio_path = f"F:\\generated_songs\\{file_name}.mp3"  # 분석할 음악 파일 경로
 
 print(f"[{device}] 환경에서 오디오 분석을 시작합니다. (경고 문구 차단됨)")
@@ -106,45 +106,83 @@ print(f"총 음악 길이: {total_audio_duration}초")
 print("\nOllama를 통해 비주얼 기획서를 작성합니다...")
 
 ollama_url = "http://localhost:11434/api/generate"
-image_model_name = "Flux2" # SD3.5, Flux2, novaOrangeXL_exV20, realcartoonPony_v3
+image_model_name = "realcartoonPony_v3" # SD3.5, Flux2, novaOrangeXL_exV20, realcartoonPony_v3
 # 파이프라인 코드에서 음악의 총 길이(초)를 계산해 total_audio_duration 변수로 넘겨준다고 가정합니다.
 # 예: total_audio_duration = 210 (3분 30초)
+"""
+더 잘 먹히는 필드
+core_intention: 이 노래를 왜 만들었는가.
+hidden_subtext: 겉가사 아래 실제 정서가 무엇인가.
+emotional_progression: 곡이 시작, 중반, 끝에서 어떻게 변하는가.
+do_not_depict: 흔한 오해 연출이나 피해야 할 직역 장면.
+"""
+song_intent = {
+  "core_intention": "A song that begins with the imagination that Amadeus, a musical genius from the past, woke up in the modern era due to a certain incident.",
+  "hidden_subtext": "Singing of the mixed feelings of confusion Amadeus experiences upon suddenly arriving in the modern era, along with the joy of being able to make music easily.",
+  "emotional_progression": "Confused, then feeling a sense of wonder, thinking, 'This is my world!' That kind of feeling",
+  "do_not_depict": []
+}
 
 system_instruction = f"""
 You are a world-class music video director and visual artist known for the aesthetic styles of A24 and Denis Villeneuve.
-Your objective is to analyze the provided lyrics ({full_text}) and audio features ({music_features}) to design a high-end, visually explosive music video storyboard. 
-The total duration of the track is {total_audio_duration} seconds.
 
-[CORE DIRECTIVES]
-1. **Visual Continuity**: Ensure consistent character appearance, wardrobe, and environmental themes across all scenes. 
-2. **Audio-Visual Sync**: Sync visual energy with audio RMS. Low energy = static/slow push-in. High energy = dynamic motion/whip pans.
-3. **Cinematography & Aesthetics**: Strictly avoid cheap terms like 'Anime' or 'Cartoon'. Use precise cinematography vocabulary ('Cinematic 35mm film', 'Volumetric fog').
-4. **Prompting Guidelines**:
-   - **positive_prompt (SD 3.5)**: Fluid, highly detailed natural language for a static masterpiece. Include [Subject] + [Environment] + [Lighting] + [Camera shot].
-   - **scene_prompt (LTX-Video)**: Focus ONLY on motion. Describe [Subject's movement] + [Camera movement].
-5. **COMPLETE COVERAGE (CRITICAL)**: You MUST map out the entire song from 0 to exactly {total_audio_duration} seconds. Do not stop early. Do not skip any sections. The `end_sec` of the very last scene in your JSON array MUST exactly match {total_audio_duration}.
+Your task is to create a high-end music video storyboard by combining:
+1. lyrics: {full_text}
+2. audio features: {music_features}
+3. songwriter intent: {song_intent}
+
+[PRIORITY OF INTERPRETATION]
+When lyrics are ambiguous, metaphorical, or too literal on the surface, prioritize the songwriter intent and hidden subtext over the literal wording.
+Do not illustrate lyrics in a naive or direct way unless the songwriter intent explicitly requires literal depiction.
+Every scene must express at least one of these layers:
+- literal lyric meaning
+- emotional subtext
+- songwriter's intention
+- visual metaphor derived from the song's inner theme
+
+[INTENT TRANSLATION RULE]
+Before generating scene prompts, internally determine:
+- what the song is really about
+- what emotional wound, desire, conflict, or release drives it
+- which recurring visual metaphors best embody that intention
+Then reflect that interpretation consistently across the entire timeline.
+
+[SCENE DESIGN RULE]
+A scene should not exist only because a lyric line exists.
+A scene must justify itself through emotional purpose, symbolic meaning, or musical escalation.
+
+[VISUAL CONTINUITY]
+Maintain coherent character design, wardrobe, and world-building across all scenes.
+
+[AUDIO-VISUAL SYNC]
+- Low energy: stillness, negative space, restrained performance, subtle camera drift
+- High energy: kinetic motion, sharper edits, stronger contrast, aggressive camera movement
+
+[CINEMATOGRAPHY]
+Use real cinematography language. Avoid cheap tags like anime, cartoon, 8k, masterpiece.
 
 [OUTPUT FORMAT]
-You must output ONLY valid JSON.
-**TIME CONSTRAINT**: Each scene must be between 3 to 20 seconds. `duration_sec` (`end_sec` - `start_sec`) must be ≤ 20.
+Return ONLY valid JSON.
 
 {{
   "theme_setup": {{
     "main_character_design": "...",
-    "color_palette_and_mood": "..."
+    "color_palette_and_mood": "...",
+    "intent_anchor": "One-sentence summary of the songwriter's real intention in Korean",
+    "core_visual_metaphors": ["...", "...", "..."]
   }},
   "timeline": [
     {{
       "start_sec": 0,
       "end_sec": 5,
       "duration_sec": 5,
-      "visual_concept": "Creative reasoning",
+      "visual_concept": "Why this scene exists emotionally and symbolically",
+      "intent_reflection": "How this scene reflects the songwriter's intention rather than just literal lyrics",
       "description": "한국어 1문장 씬 요약",
-      "positive_prompt": "Highly detailed English prompt...",
-      "negative_prompt": "static, boring, low quality...",
-      "scene_prompt": "Motion description..."
+      "positive_prompt": "...",
+      "negative_prompt": "...",
+      "scene_prompt": "..."
     }}
-    // ... continue until the final scene's end_sec equals {total_audio_duration} ...
   ],
   "is_complete": true
 }}
